@@ -1,14 +1,14 @@
- <b> JetLend Email Service (Test Task)</b>
+<b> JetLend Email Service (Test Task)</b>
 
 Сервис на Django для парсинга данных из XLSX-файлов и эмуляции рассылки e-mail сообщений с поддержкой системы повторных попыток (Retry) и защиты от параллельного запуска.
 
-<b> Стек технологий</b>
-• <b>Python 3.12</b>
-• <b>Django 5.x</b> + Django Rest Framework
-• <b>PostgreSQL</b> (в качестве основной БД)
-• <b>Poetry</b> (управление зависимостями)
-• <b>Docker &amp; Docker Compose</b> (контейнеризация)
-• <b>Pytest</b> (тестирование)
+* <b> Стек технологий</b>
+* • <b>Python 3.12</b>
+* • <b>Django 5.x</b> + Django Rest Framework
+* • <b>PostgreSQL</b> (в качестве основной БД)
+* • <b>Poetry</b> (управление зависимостями)
+* • <b>Docker &amp; Docker Compose</b> (контейнеризация)
+* • <b>Pytest</b> (тестирование)
 
 ---
 
@@ -24,7 +24,7 @@
 
 <pre><code class="language-bash">docker-compose up --build</code></pre>
 
-Сервис станет доступным по адресу: <b>&lt;a href=&quot;http://localhost:8000</b>">http://localhost:8000**</a>
+Сервис станет доступным по адресу: **<http://localhost:8000>**
 
 ---
 
@@ -44,7 +44,7 @@
 
  <b>4. Запуск сервера разработки</b>
 <pre><code class="language-bash">python manage.py runserver</code></pre>
-Проект запустится по адресу: <b>&lt;a href=&quot;http://127.0.0.1:8000</b>">http://127.0.0.1:8000**</a>
+Проект запустится по адресу: **<http://127.0.0.1:8000>**
 
 ---
 
