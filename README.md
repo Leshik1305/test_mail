@@ -1,72 +1,71 @@
-▌ Тестовое задание: Сервис c manage commands по парсингу из XLSX файлов и отправкой e-mail
+ <b> JetLend Email Service (Test Task)</b>
 
-▌ Стек технологий
+Сервис на Django для парсинга данных из XLSX-файлов и эмуляции рассылки e-mail сообщений с поддержкой системы повторных попыток (Retry) и защиты от параллельного запуска.
 
-- Python 3.12
-- Django 5.x + Django Rest Framework
-- PostgreSQL
-- Poetry (управление зависимостями)
-- Docker & Docker Compose
+<b> Стек технологий</b>
+• <b>Python 3.12</b>
+• <b>Django 5.x</b> + Django Rest Framework
+• <b>PostgreSQL</b> (в качестве основной БД)
+• <b>Poetry</b> (управление зависимостями)
+• <b>Docker &amp; Docker Compose</b> (контейнеризация)
+• <b>Pytest</b> (тестирование)
 
-▌ Установка и запуск (через Docker)
+---
 
-▌ 1. Подготовка окружения
+<b> Установка и запуск (через Docker)</b>
 
-Переименуйте файл настроек .env.example в .env. Затем заполните необходимые переменные среды, включая настройки базы данных и секретные ключи.
+<b>1. Подготовка окружения</b>
+Переименуйте файл настроек <code>.env.example</code> в <code>.env</code> и заполните переменные среды (настройки БД, секретные ключи):
 
-cp .env.example .env
+<pre><code class="language-bash">cp .env.example .env</code></pre>
 
-▌ 2. Запуск проекта
+<b>2. Запуск проекта</b>
+Запустите контейнеры приложения (автоматически применятся миграции и поднимется сервер):
 
-Запустите контейнеры приложения командой:
+<pre><code class="language-bash">docker-compose up --build</code></pre>
 
-docker-compose up --build
+Сервис станет доступным по адресу: <b>&lt;a href=&quot;http://localhost:8000</b>">http://localhost:8000**</a>
 
-Сервис станет доступным по адресу: http://localhost:8000
+---
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
-▌ Локальная разработка (без Docker)
+<b> Локальная разработка (без Docker)</b>
 
-Если у вас установлен менеджер зависимостей Poetry, выполните шаги ниже:
+Если у вас установлен менеджер зависимостей <b>Poetry</b>, выполните следующие шаги:
 
-▌ 1. Установка зависимостей
+<b>1. Установка зависимостей</b>
+<pre><code class="language-bash">poetry install</code></pre>
 
-Установите требуемые пакеты с помощью команды:
+<b>2. Активация виртуального окружения</b>
+<pre><code class="language-bash">poetry shell</code></pre>
 
-poetry install
+<b>3. Выполнение миграций БД</b>
+Убедитесь, что у вас запущена локальная база данных PostgreSQL, затем выполните:
+<pre><code class="language-bash">python manage.py migrate</code></pre>
 
-▌ 2. Активация виртуального окружения
+ <b>4. Запуск сервера разработки</b>
+<pre><code class="language-bash">python manage.py runserver</code></pre>
+Проект запустится по адресу: <b>&lt;a href=&quot;http://127.0.0.1:8000</b>">http://127.0.0.1:8000**</a>
 
-Активируйте виртуальное окружение следующим образом:
+---
 
-poetry shell
+ <b> Использование команд (Management Commands)</b>
 
-▌ 3. Выполнение миграций БД
+В проекте реализованы две ключевые команды для обработки данных.
 
-Выполните миграционные скрипты для создания таблиц базы данных:
+ <b>1. Парсинг XLSX</b>
+Импортирует список адресатов из файла Excel в базу данных:
+<pre><code class="language-bash">python manage.py import_xlsx import_data/data.xlsx</code></pre>
+<b>2. Эмуляция отправки e-mail</b>
+Запускает процесс &quot;отправки&quot; писем из очереди. 
+• <b>Особенности</b>: использует <code>select_for_update(skip_locked=True)</code> для безопасной работы в несколько потоков, поддерживает рандомные задержки и систему Retry (до 3 попыток).
+<pre><code class="language-bash">python manage.py run_mailing</code></pre>
 
-python manage.py migrate
+---
 
-▌ 4. Запуск сервера разработки
+<b> Тестирование</b>
 
-Поднимите локальный веб-сервер командой:
+Для запуска тестов (используется <code>pytest</code> с плагинами <code>pytest-django</code> и <code>pytest-mock</code>):
 
-python manage.py runserver
+<pre><code class="language-bash">pytest src/apps/mails/tests.py</code></pre>
 
-Проект запустится по адресу: http://127.0.0.1:8000
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
-▌ Запуск команд
-
-Для парсинга
-
-python manage.py import_xlsx import_data/data.xlsx
-
-Для эмуляции отправки e-mail
-
-python manage.py run_mailing
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
-▌ Запуск тестов
-
-pytest src/apps/mails/tests.py
+---
