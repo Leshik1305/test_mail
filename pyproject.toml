@@ -21,5 +21,8 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 dev = [
     "isort (>=8.0.1,<9.0.0)",
-    "black (>=26.3.1,<27.0.0)"
+    "black (>=26.3.1,<27.0.0)",
+    "pytest (>=9.0.2,<10.0.0)",
+    "pytest-django (>=4.12.0,<5.0.0)",
+    "pytest-mock (>=3.15.1,<4.0.0)"
 ]

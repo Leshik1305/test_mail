@@ -8,6 +8,8 @@ from src.apps.mails.models import Mailing, MailingStatKey, ParseStatKey
 
 
 class XLSXParserService:
+    """Сервис парсингаю"""
+
     def __init__(self):
         self.stats = {key: 0 for key in ParseStatKey}
 
@@ -69,14 +71,14 @@ class MailingService:
 
     MAX_RETRIES = 3
 
-    def __init__(self):
-        self.stats = {
+    def send_pending_mails(self):
+        """Отправка писем с защитой от параллельного запуска, рандомной задержкой и системой повторных попыток."""
+
+        stats = {
             MailingStatKey.SENT: 0,
             MailingStatKey.FAILED: 0,
         }
 
-    def send_pending_mails(self):
-        """Отправка писем с защитой от параллельного запуска, рандомной задержкой и системой повторных попыток."""
         print("Запуск рассылки...")
         while True:
             with transaction.atomic():
@@ -97,18 +99,18 @@ class MailingService:
 
                 if is_success:
                     mailing.status = Mailing.Status.SENT
-                    self.stats[MailingStatKey.SENT] += 1
+                    stats[MailingStatKey.SENT] += 1
                     print(f"OK: Письмо на {mailing.email} успешно 'отправлено'.")
 
                 else:
                     mailing.retry_count += 1
                     if mailing.retry_count >= self.MAX_RETRIES:
                         mailing.status = Mailing.Status.ERROR
-                        self.stats[MailingStatKey.FAILED] += 1
+                        stats[MailingStatKey.FAILED] += 1
                         print(
                             f"{mailing.email} переведен в ERROR после {mailing.retry_count} попыток."
                         )
 
                 mailing.save()
         print(f"Рассылка завершена")
-        return self.stats
+        return stats
